@@ -9,6 +9,8 @@ import java.io.OutputStream;
 
 import java.security.Key;
 import java.security.KeyStore;
+import java.security.KeyStore.PasswordProtection;
+import java.security.KeyStore.SecretKeyEntry;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -23,7 +25,8 @@ import java.security.cert.Certificate;
 
 import sun.misc.BASE64Decoder; 
 import sun.misc.BASE64Encoder; 
-
+import java.security.spec.PKCS8EncodedKeySpec; 
+import javax.crypto.EncryptedPrivateKeyInfo; 
 
 public class CertificateDB{
   
@@ -60,7 +63,10 @@ public class CertificateDB{
 	  }catch (Exception e) {
 		 return "error : while trying to load key store , exception msg : " + e.getMessage();
 	  }
-	  if(kind.equals("secert key")){
+	  
+	  
+	  
+	  if(kind.equals("secret key")){
 		  try{
 			  addSecretToKeystore(ks,taskId,data,algorithem); 
 		  }
@@ -102,9 +108,10 @@ public class CertificateDB{
 		  }catch (Exception e) {
 			 return "error : while trying to load key store , exception msg : " + e.getMessage();
 		  }
-		  if(kind.equals("secert key")){
+		  if(kind.equals("secret key")){
 			  try{
 				 Key key=ks.getKey(taskId,ksPassword.toCharArray());
+				
 				 byte[] encodeBytes=key.getEncoded(); 
 				 BASE64Encoder enc=new BASE64Encoder(); 
 				 return enc.encode(encodeBytes); 
@@ -134,9 +141,17 @@ public class CertificateDB{
   	
 	private static void addCertToKeyStore(KeyStore ks, String taskId,
 			String data, String algorithem) throws Exception {
+		
 		CertificateFactory cf=CertificateFactory.getInstance(algorithem);
 		InputStream in=new ByteArrayInputStream(data.getBytes()); 
 		Certificate cert=cf.generateCertificate(in); 
+		
+		
+		//old unimporetent data 
+		if(ks.containsAlias(taskId))
+			ks.deleteEntry(taskId); 
+		
+		
 		ks.setCertificateEntry(taskId, cert); 
 		
 		
@@ -145,7 +160,18 @@ public class CertificateDB{
 	private static void addSecretToKeystore(KeyStore ks, String alias, String data,String alg) throws Exception {
 		BASE64Decoder		decoder=new BASE64Decoder(); 
 		byte[]				binData=decoder.decodeBuffer(data);
-		ks.setKeyEntry(alias,binData,null); 
+		
+		SecretKeySpec spec=new SecretKeySpec(binData,"AES"); 
+					
+		KeyStore.SecretKeyEntry ent=new SecretKeyEntry(spec);
+		
+		//old unimporetent data 
+		if(ks.containsAlias(alias))
+				ks.deleteEntry(alias);
+		
+		PasswordProtection keyStorePP = new PasswordProtection(ksPassword.toCharArray());
+		
+		ks.setEntry(alias, ent,keyStorePP); 
 	}
 
 	private static KeyStore loadKeyStore() throws  Exception {
