@@ -1,4 +1,4 @@
-Jul 13 14:33:58 JavaBridge ERROR: An exception occured: java.net.BindException: Address already in use: JVM_Bind
+Jul 18 09:44:44 JavaBridge ERROR: An exception occured: java.net.BindException: Address already in use: JVM_Bind
 java.net.BindException: Address already in use: JVM_Bind
 	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
 	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
@@ -16,4 +16,23 @@ java.net.BindException: Address already in use: JVM_Bind
 	at php.java.bridge.JavaBridgeRunner.<init>(JavaBridgeRunner.java:69)
 	at php.java.bridge.JavaBridgeRunner.<init>(JavaBridgeRunner.java:74)
 	at php.java.bridge.JavaBridgeRunner.getInstance(JavaBridgeRunner.java:137)
-	at CertificateDB.<clinit>(CertificateDB.java:36)
+	at CertificateDB.<clinit>(CertificateDB.java:40)
+Jul 18 09:44:44 JavaBridge ERROR: An exception occured: java.net.BindException: Address already in use: JVM_Bind
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at php.java.bridge.TCPServerSocket.newServerSocket(TCPServerSocket.java:57)
+	at php.java.bridge.TCPServerSocket.<init>(TCPServerSocket.java:78)
+	at php.java.bridge.TCPServerSocket.create(TCPServerSocket.java:50)
+	at php.java.bridge.Standalone.bind(Standalone.java:66)
+	at php.java.bridge.JavaBridge.bind(JavaBridge.java:229)
+	at php.java.bridge.JavaBridgeRunner.bind(JavaBridgeRunner.java:162)
+	at php.java.bridge.http.HttpServer.<init>(HttpServer.java:101)
+	at php.java.bridge.JavaBridgeRunner.<init>(JavaBridgeRunner.java:69)
+	at php.java.bridge.JavaBridgeRunner.<init>(JavaBridgeRunner.java:74)
+	at php.java.bridge.JavaBridgeRunner.getInstance(JavaBridgeRunner.java:137)
+	at CertificateDB.main(CertificateDB.java:49)

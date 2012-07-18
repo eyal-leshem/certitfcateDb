@@ -29,23 +29,47 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import javax.crypto.EncryptedPrivateKeyInfo; 
 
 public class CertificateDB{
+
   
 	public static final String beginCertString="-----BEGIN CERTIFICATE-----\r\n"; 
 	public static final String endCertString="\r\n-----END CERTIFICATE-----\r\n";
 	
-   public static final String JAVABRIDGE_PORT="8087";
+	public static final String JAVABRIDGE_PORT="8087";
  
-   static final php.java.bridge.JavaBridgeRunner runner = 
+	static final php.java.bridge.JavaBridgeRunner runner = 
 		  								php.java.bridge.JavaBridgeRunner.getInstance(JAVABRIDGE_PORT);
   
-   private static String ksPath;
-   private static String ksPassword="a10097"; 
+	private static String ksPath;
+	private static String ksPassword="a10097"; 
+   
+	private static CertificateDB inst=new CertificateDB();
 
-   	public static void main(String args[]) throws Exception {
-	  ksPath="c:\\temp\\certificateDB\\temp.keyStore"; 
-    runner.waitFor();
-    System.exit(0);
-   	}
+   
+    public static void main(String[] args) throws InterruptedException {
+    	
+    	  ksPath="c:\\temp\\certificateDB\\temp.keyStore"; 
+    	 runner.waitFor();	  
+    	 System.exit(0);
+	}
+    
+    public static void a(String[] args){
+    	if(args[0].equals("start")){
+    	 	  ksPath="c:\\temp\\certificateDB\\temp.keyStore"; 
+    	       try {
+				runner.waitFor();
+    	       } catch (InterruptedException e) {
+    	    	   e.printStackTrace();
+    	       }	  
+    	    	System.exit(0);    		
+    	}
+    	else{
+    		runner.destroy(); 
+    	}
+    }
+ 
+   	
+   
+   	
 
   	public static String saveData(String[] args){
   		String taskId=args[0]; 
@@ -101,7 +125,7 @@ public class CertificateDB{
   		
 	  	  KeyStore ks; 
 	  	  if(!kind.equals("secret key")&&(!kind.equals("certificate"))){
-	  		  return "error :unknwon data" ; 
+	  		  return "error :unknwon data type" ; 
 		  }
 	  	  try{		  
 			  ks=loadKeyStore();		  	  
@@ -219,4 +243,4 @@ public class CertificateDB{
 		} 
 	}
   
- }
+}
